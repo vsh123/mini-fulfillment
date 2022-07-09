@@ -40,8 +40,10 @@ class Sku(
         require(name.length <= MAX_NAME_LENGTH) { "Sku이름은 ${MAX_NAME_LENGTH}자를 넘길 수 없습니다." }
     }
 
-    fun addBarcode(barcode: String) {
-        _barcodes.add(Barcode(barcode, this))
+    fun addBarcode(code: String): Barcode {
+        val barcode = Barcode(code, this)
+        _barcodes.add(barcode)
+        return barcode
     }
 }
 
