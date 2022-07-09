@@ -12,7 +12,7 @@ internal class SkuTest {
     @Test
     internal fun sku생성() {
         assertDoesNotThrow("SKU정상 생성") {
-            aSku()
+            Sku(code = "code", name = "name")
         }
     }
 
@@ -47,6 +47,22 @@ internal class SkuTest {
             aSku(name = "a".repeat(21))
         }
     }
+
+    @Test
+    internal fun `바코드를 등록한다`() {
+        val sku = aSku()
+        sku.addBarcode("barcode")
+
+        assertThat(sku.barcodes).hasSize(1)
+        assertThat(sku.barcodes[0].code).isEqualTo("barcode")
+    }
 }
 
-fun aSku(code: String = "A0000001", name: String = "테스트SKU") = Sku(code = code, name = name)
+private operator fun <E> Set<E>.get(index: Int): E = toList()[index]
+
+fun aSku(
+    code: String = "A0000001",
+    name: String = "테스트SKU",
+    status: SkuStatus = SkuStatus.READY_LAUNCHING,
+    barcodes: Set<Barcode> = setOf()
+) = Sku(code = code, name = name, status = status, barcodes = barcodes)
