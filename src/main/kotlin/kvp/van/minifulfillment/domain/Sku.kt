@@ -1,13 +1,35 @@
 package kvp.van.minifulfillment.domain
 
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.OneToMany
+
 private const val MAX_NAME_LENGTH = 20
 
+@Entity
 class Sku(
+    @Column(name = "`code`", length = 20, unique = true, nullable = false)
     val code: String,
+
+    @Column(name = "`name`", length = MAX_NAME_LENGTH, nullable = false)
     val name: String,
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "`status`", length = 20, nullable = false)
     val status: SkuStatus = SkuStatus.READY_LAUNCHING,
-    barcodes: Set<Barcode> = setOf()
+
+    barcodes: Set<Barcode> = setOf(),
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0
 ) {
+    @OneToMany(mappedBy = "sku")
     private val _barcodes: MutableSet<Barcode> = barcodes.toMutableSet()
     val barcodes: Set<Barcode>
         get() = _barcodes.toSet()
