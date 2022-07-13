@@ -12,7 +12,7 @@ private const val MAX_CODE_LENGTH = 20
 
 @Entity
 class Barcode(
-    @Column(name = "`code`", length = 20, unique = true, nullable = false)
+    @Column(name = "`code`", length = MAX_CODE_LENGTH, unique = true, nullable = false)
     val code: String,
 
     @ManyToOne

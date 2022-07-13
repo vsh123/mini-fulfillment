@@ -17,7 +17,7 @@ internal class CenterTest {
 
     @Test
     internal fun `센터의 초기상태는 오픈 준비 중이다`() {
-        val center = aCenter()
+        val center = Center(code = "code", name = "테스트 센터")
 
         assertThat(center.status).isEqualTo(CenterStatus.READY_OPEN)
     }
