@@ -38,5 +38,5 @@ enum class CenterStatus(
 ) {
     READY_OPEN("오픈 준비 중"),
     OPENED("운영 중"),
-    CLOSED("운영 중"),
+    CLOSED("폐점"),
 }
