@@ -1,5 +1,10 @@
 package kvp.van.minifulfillment.application
 
+import kvp.van.minifulfillment.domain.CenterRepository
+import kvp.van.minifulfillment.domain.SkuRepository
+import kvp.van.minifulfillment.domain.StockRepository
+import kvp.van.minifulfillment.domain.aCenter
+import kvp.van.minifulfillment.domain.get
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
@@ -11,6 +16,15 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 @SpringBootTest
 internal class SkuServiceTest {
+    @Autowired
+    private lateinit var skuRepository: SkuRepository
+
+    @Autowired
+    private lateinit var centerRepository: CenterRepository
+
+    @Autowired
+    private lateinit var stockRepository: StockRepository
+
     @Autowired
     private lateinit var skuService: SkuService
 
@@ -35,5 +49,18 @@ internal class SkuServiceTest {
         assertThrows<IllegalArgumentException>("동일한 코드로 생성 시 실패") {
             skuService.create(request)
         }
+    }
+
+    @Test
+    internal fun `sku생성 시 모든 센터의 해당 재고를 0으로 생성한다`() {
+        centerRepository.save(aCenter())
+        val request = CreateSkuRequest(code = "code", name = "name")
+        val result = skuService.create(request)
+        val sku = skuRepository[result.id]
+
+        val stocks = stockRepository.findAllBySku(sku)
+
+        assertThat(stocks).hasSize(1)
+        assertThat(stocks.all { it.quantity == 0 }).isTrue
     }
 }
