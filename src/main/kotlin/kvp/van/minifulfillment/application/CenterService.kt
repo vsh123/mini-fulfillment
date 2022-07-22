@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 @Service
 class CenterService(
+    private val stockService: StockService,
     private val centerRepository: CenterRepository
 ) {
     fun create(request: CreateCenterRequest): CenterResponse {
@@ -18,6 +19,8 @@ class CenterService(
                 name = request.name
             )
         )
+        stockService.create(center)
+
         return CenterResponse(center)
     }
 }
