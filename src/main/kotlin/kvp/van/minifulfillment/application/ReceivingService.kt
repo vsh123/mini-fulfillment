@@ -13,7 +13,7 @@ class ReceivingService(
     fun receive(request: ReceivingRequest): StockResponse {
         require(request.quantity > 0) { "입고수량은 0보다 커야합니다" }
         val stock = stockRepository.getByCenterIdAndSkuId(centerId = request.centerId, skuId = request.skuId)
-        stock.increase(request.quantity)
+        stock.receive(request.quantity)
         return StockResponse(stock)
     }
 }

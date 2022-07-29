@@ -29,6 +29,9 @@ class Sku(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
 ) {
+    val canReceive: Boolean
+        get() = RECEIVABLE_STATUSES.contains(status)
+
     @OneToMany(mappedBy = "sku")
     private val _barcodes: MutableSet<Barcode> = barcodes.toMutableSet()
     val barcodes: Set<Barcode>
@@ -46,6 +49,8 @@ class Sku(
         return barcode
     }
 }
+
+private val RECEIVABLE_STATUSES: List<SkuStatus> = listOf(SkuStatus.READY_LAUNCHING, SkuStatus.IN_SALE)
 
 enum class SkuStatus(
     val description: String

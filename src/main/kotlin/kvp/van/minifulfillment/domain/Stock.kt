@@ -29,6 +29,13 @@ class Stock(
         require(quantity >= 0) { "재고는 0보다 작을 수 없습니다." }
     }
 
+    fun receive(quantity: Int) {
+        require(quantity > 0) { "입고수량은 0보다 커야합니다" }
+        require(center.canReceive) { "센터가 입고 불가능한 상태입니다. ${center.name} : ${center.status.description}" }
+        require(sku.canReceive) { "SKU가 입고 불가능합니다. ${sku.name} : ${sku.status.description}" }
+        increase(quantity)
+    }
+
     fun increase(increaseQuantity: Int) {
         require(increaseQuantity >= 0) { "증가시키려는 수량은 0이상이여야 합니다." }
         addQuantity(increaseQuantity)
