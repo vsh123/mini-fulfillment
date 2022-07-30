@@ -8,7 +8,8 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 @Service
 class SkuService(
-    private val skuRepository: SkuRepository
+    private val skuRepository: SkuRepository,
+    private val stockService: StockService
 ) {
     fun create(request: CreateSkuRequest): SkuResponse {
         require(skuRepository.existsByCode(request.code).not()) { "이미 동일한 Sku코드가 존재합니다. ${request.code}" }
@@ -19,6 +20,8 @@ class SkuService(
                 name = request.name
             )
         )
+        stockService.create(sku)
+
         return SkuResponse(sku)
     }
 }

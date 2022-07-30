@@ -26,12 +26,17 @@ class Center(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
 ) {
+    val canReceive: Boolean
+        get() = RECEIVABLE_STATUSES.contains(status)
+
     init {
         require(code.isNotBlank()) { "센터코드는 공백으로만 이루어질 수 없습니다." }
         require(name.isNotBlank()) { "센터이름은 공백으로만 이루어질 수 없습니다." }
         require(name.length <= MAX_NAME_LENGTH) { "센터이름은 ${MAX_NAME_LENGTH}자를 넘길 수 없습니다." }
     }
 }
+
+private val RECEIVABLE_STATUSES: List<CenterStatus> = listOf(CenterStatus.READY_OPEN, CenterStatus.OPENED)
 
 enum class CenterStatus(
     val description: String
